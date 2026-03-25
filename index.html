@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>装饰项目清单报价系统</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+
+<body>
+    <!-- 登录界面 -->
+    <div id="login-container">
+        <div class="login-box">
+            <div class="login-logo">
+                <h2><i class="fas fa-home"></i> 立诺装饰 报价系统</h2>
+                <p>请登录以继续使用</p>
+            </div>
+            <div id="login-loading" class="loading-spinner"></div>
+            <div id="login-form">
+                <div class="login-input-group">
+                    <label for="username"><i class="fas fa-user"></i> 用户名</label>
+                    <input type="text" id="username" class="login-input" placeholder="请输入用户名" autocomplete="username">
+                </div>
+                <div class="login-input-group">
+                    <label for="password"><i class="fas fa-lock"></i> 密码</label>
+                    <input type="password" id="password" class="login-input" placeholder="请输入密码"
+                        autocomplete="current-password">
+                </div>
+                <div id="login-error" class="login-error"></div>
+                <button id="login-button" class="login-btn"><i class="fas fa-sign-in-alt"></i> 登录</button>
+                <div class="login-footer">
+                    <p>系统版本 1.0 | 技术支持: 15662061321</p>
+                    <p>© 2026 泰安市立诺装饰</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 原页面内容 -->
+    <div id="main-container" style="display: none;">
+        <div class="container">
+            <header>
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <div>
+                        <h1><i class="fas fa-home"></i> 项目清单报价系统</h1>
+                        <div class="header-subtitle"></div>
+                    </div>
+                </div>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 15px;">
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button class="btn btn-sm btn-outline" id="toggleAllCategoriesBtn"
+                            onclick="toggleAllCategories()" title="快捷键: Alt+1"><i class="fas fa-angle-double-down"></i>
+                            <span class="btn-text">全部展开</span></button>
+                        <button class="btn btn-sm btn-outline" id="toggleAllSpacesBtn" onclick="toggleAllSpaces()"
+                            title="快捷键: Alt+2"><i class="fas fa-layer-group"></i> <span
+                                class="btn-text">空间折叠</span></button>
+                        <div class="desktop-actions" style="display: flex; gap: 8px; margin-left: auto;">
+                            <div style="font-size: 0.7rem; color: #cbd5e1; margin-top: 4px;">
+                                <i class="fas fa-keyboard"></i> 快捷键: Alt+1 全部折叠/展开 | Alt+2 空间折叠/展开，ALT+E导出Excel
+                            </div>
+                            <button class="btn btn-success desktop-btn" id="headerSaveQuotationBtn">
+                                <i class="fas fa-save"></i> <span class="desktop-btn-text">保存当前报价</span>
+                            </button>
+                            <button class="btn btn-warning desktop-btn" onclick="logout()" title="退出登录">
+                                <i class="fas fa-sign-out-alt"></i> <span class="desktop-btn-text">退出</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="tabs-container">
+                <div class="tabs">
+                    <div class="tab active" data-tab="home"><i class="fas fa-house"></i> <span
+                            class="tab-text">项目清单</span></div>
+                    <div class="tab" data-tab="space"><i class="fas fa-layer-group"></i> <span
+                            class="tab-text">空间库</span></div>
+                    <div class="tab" data-tab="saved-records"><i class="fas fa-save"></i> <span
+                            class="tab-text">报价记录</span></div>
+                    <div class="tab-export-btn" onclick="exportToExcel()"><i class="fas fa-file-excel"></i> <span
+                            class="tab-text">导出Excel</span></div>
+                </div>
+            </div>
+
+
+            <!-- 家装板块 -->
+            <div id="home-tab" class="tab-content active">
+                <div class="section-card section-intro">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <i class="fas fa-paint-roller"></i> 项目清单
+                        </div>
+                    </div>
+                    <div class="section-subtitle">
+                        添加您的项目，系统将自动分类统计
+                    </div>
+                    <div style="display:flex; flex-wrap: wrap; gap:10px; align-items:center;">
+                        <input type="text" class="project-name-input" id="projectNameInput" placeholder="项目名称" value=""
+                            style="flex:1; min-width: 200px;" oninput="updateProjectNameFromInput(this)">
+                        <button class="btn btn-primary" onclick="quickAddProjectWithChoice()">
+                            <i class="fas fa-bolt"></i> 快速模板
+                        </button>
+                        <button class="btn btn-success" onclick="clearAllProjects('home')">
+                            <i class="fas fa-trash-alt"></i> 清空
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 基础装修 -->
+                <div class="section-card category-section">
+                    <div class="section-header">
+                        <div class="section-title collapsible" onclick="toggleCategoryCollapse('home', 'base')">
+                            <i class="fas fa-hammer"></i> 基础装修
+                            <span class="badge" id="home-base-count">0个项目</span>
+                            <i class="fas fa-chevron-down collapse-icon" id="collapse-home-base"></i>
+                        </div>
+                        <div class="section-actions">
+                            <button class="btn btn-primary btn-sm" onclick="openAddMultiModal('home', 'base')">
+                                <i class="fas fa-plus"></i> 添加项目
+                            </button>
+                        </div>
+                    </div>
+                    <div id="home-base-content" class="category-content">
+                        <div class="category-summary">
+                            <div class="category-total">
+                                总计: <span id="home-base-total">¥0.00</span>
+                            </div>
+                            <div class="space-filter">
+                                <select class="form-select-sm" id="home-base-space-filter"
+                                    onchange="filterProjectsBySpace('home', 'base')">
+                                    <option value="">全部空间</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="item-list-scroll">
+                            <div class="item-list" id="home-base-list">
+                                <div class="empty-state">暂无项目，请添加</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 主要材料 -->
+                <div class="section-card category-section">
+                    <div class="section-header">
+                        <div class="section-title collapsible" onclick="toggleCategoryCollapse('home', 'auxiliary')">
+                            <i class="fas fa-tools"></i> 主要材料
+                            <span class="badge" id="home-auxiliary-count">0个项目</span>
+                            <i class="fas fa-chevron-down collapse-icon" id="collapse-home-auxiliary"></i>
+                        </div>
+                        <div class="section-actions">
+                            <button class="btn btn-primary btn-sm" onclick="openAddMultiModal('home', 'auxiliary')">
+                                <i class="fas fa-plus"></i> 添加项目
+                            </button>
+                        </div>
+                    </div>
+                    <div id="home-auxiliary-content" class="category-content">
+                        <div class="category-summary">
+                            <div class="category-total">
+                                总计: <span id="home-auxiliary-total">¥0.00</span>
+                            </div>
+                            <div class="space-filter">
+                                <select class="form-select-sm" id="home-auxiliary-space-filter"
+                                    onchange="filterProjectsBySpace('home', 'auxiliary')">
+                                    <option value="">全部空间</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="item-list-scroll">
+                            <div class="item-list" id="home-auxiliary-list">
+                                <div class="empty-state">暂无项目，请添加</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 家具/电器及配饰 -->
+                <div class="section-card category-section">
+                    <div class="section-header">
+                        <div class="section-title collapsible" onclick="toggleCategoryCollapse('home', 'furniture')">
+                            <i class="fas fa-couch"></i> 家具/电器及配饰
+                            <span class="badge" id="home-furniture-count">0个项目</span>
+                            <i class="fas fa-chevron-down collapse-icon" id="collapse-home-furniture"></i>
+                        </div>
+                        <div class="section-actions">
+                            <button class="btn btn-primary btn-sm" onclick="openAddMultiModal('home', 'furniture')">
+                                <i class="fas fa-plus"></i> 添加项目
+                            </button>
+                        </div>
+                    </div>
+                    <div id="home-furniture-content" class="category-content">
+                        <div class="category-summary">
+                            <div class="category-total">
+                                总计: <span id="home-furniture-total">¥0.00</span>
+                            </div>
+                            <div class="space-filter">
+                                <select class="form-select-sm" id="home-furniture-space-filter"
+                                    onchange="filterProjectsBySpace('home', 'furniture')">
+                                    <option value="">全部空间</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="item-list-scroll">
+                            <div class="item-list" id="home-furniture-list">
+                                <div class="empty-state">暂无项目，请添加</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 其它项 -->
+                <div class="section-card category-section">
+                    <div class="section-header">
+                        <div class="section-title collapsible" onclick="toggleCategoryCollapse('home', 'other')">
+                            <i class="fas fa-ellipsis-h"></i> 其它项
+                            <span class="badge" id="home-other-count">0个项目</span>
+                            <i class="fas fa-chevron-down collapse-icon" id="collapse-home-other"></i>
+                        </div>
+                        <div class="section-actions">
+                            <button class="btn btn-primary btn-sm" onclick="openAddMultiModal('home', 'other')">
+                                <i class="fas fa-plus"></i> 添加项目
+                            </button>
+                        </div>
+                    </div>
+                    <div id="home-other-content" class="category-content">
+                        <div class="category-summary">
+                            <div class="category-total">
+                                总计: <span id="home-other-total">¥0.00</span>
+                            </div>
+                            <div class="space-filter">
+                                <select class="form-select-sm" id="home-other-space-filter"
+                                    onchange="filterProjectsBySpace('home', 'other')">
+                                    <option value="">全部空间</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="item-list-scroll">
+                            <div class="item-list" id="home-other-list">
+                                <div class="empty-state">暂无项目，请添加</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 统计汇总 -->
+                <div class="section-card summary-section">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <i class="fas fa-chart-pie"></i> 家装报价汇总
+                        </div>
+                    </div>
+                    <div id="home-summary">
+                        <div class="summary-row">
+                            <div class="summary-label">
+                                <i class="fas fa-hammer"></i> 基础装修
+                            </div>
+                            <div class="summary-value" id="home-base-summary">¥0.00</div>
+                        </div>
+                        <div class="summary-row">
+                            <div class="summary-label">
+                                <i class="fas fa-tools"></i> 主要材料
+                            </div>
+                            <div class="summary-value" id="home-auxiliary-summary">¥0.00</div>
+                        </div>
+                        <div class="summary-row">
+                            <div class="summary-label">
+                                <i class="fas fa-couch"></i> 家具家电及配饰
+                            </div>
+                            <div class="summary-value" id="home-furniture-summary">¥0.00</div>
+                        </div>
+                        <div class="summary-row">
+                            <div class="summary-label">
+                                <i class="fas fa-ellipsis-h"></i> 其它项
+                            </div>
+                            <div class="summary-value" id="home-other-summary">¥0.00</div>
+                        </div>
+                        <div class="summary-row total">
+                            <div class="summary-label">
+                                <i class="fas fa-file-invoice-dollar"></i> 合计
+                            </div>
+                            <div class="summary-value" id="home-grand-total">¥0.00</div>
+                        </div>
+                    </div>
+                    <div class="summary-footer">
+                        <div class="summary-note">
+                            <i class="fas fa-info-circle"></i> 报价已包含材料及人工费，不含税金
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 空间库板块 -->
+            <div id="space-tab" class="tab-content">
+                <div class="section-card space-section">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <i class="fas fa-layer-group"></i> 空间区域词库
+                            <button class="btn btn-primary btn-sm" onclick="openSpaceModal()">
+                                <i class="fas fa-plus"></i> 添加空间名
+                            </button>
+                        </div>
+                    </div>
+                    <div class="space-categories">
+                        <div class="space-category">
+                            <h4><i class="fas fa-home"></i> 家装常用空间</h4>
+                            <div id="home-space-list" class="space-items"></div>
+                        </div>
+                        <div class="space-category">
+                            <h4><i class="fas fa-building"></i> 公装常用空间</h4>
+                            <div id="commercial-space-list" class="space-items"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 保存记录板块 -->
+            <div id="saved-records-tab" class="tab-content">
+                <div class="section-card">
+                    <div class="section-header record-header">
+                        <div class="section-title">
+                            <i class="fas fa-save"></i> 报价记录管理
+                            <button class="btn btn-warning btn-sm clear-all-btn" id="clearAllRecordsBtn">
+                                <i class="fas fa-trash-alt"></i> 清空全部记录
+                            </button>
+                        </div>
+                        <div class="section-actions record-actions-row">
+                            <button class="btn import-btn btn-sm" onclick="importData()">
+                                <i class="fas fa-file-import"></i> 从本地导入
+                            </button>
+                            <button class="btn export-btn btn-sm" onclick="exportData()">
+                                <i class="fas fa-file-export"></i> 导出到本地
+                            </button>
+                            <button class="btn cloud-backup-btn btn-sm" id="uploadCloudBtn">
+                                <i class="fas fa-cloud-upload-alt"></i> 备份到云端文件
+                            </button>
+                            <button class="btn cloud-load-btn btn-sm" id="loadCloudBtn">
+                                <i class="fas fa-cloud-download-alt"></i> 从云端加载文件
+                            </button>
+                        </div>
+                    </div>
+                    <div class="section-subtitle">最多保存5000条报价记录，点击「编辑」可恢复项目数据。</div>
+                    <div id="quotationRecordsList" style="margin-top: 15px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- ==================== 添加项目模态框 ==================== -->
+    <div id="addMultiModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeMultiModal()">&times;</button>
+            <div class="modal-header">
+                <i class="fas fa-plus-circle"></i> 添加项目
+            </div>
+            <div class="form-group">
+                <label class="form-label"><i class="fas fa-map-marker-alt"></i> 选择空间</label>
+                <select id="multiSpaceArea" class="form-select">
+                    <option value="">请选择空间</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label"><i class="fas fa-database"></i> 从项目库选择</label>
+                <button class="btn btn-primary" style="width:100%;" onclick="openMultiSelectProjectLibrary()">
+                    <i class="fas fa-folder-open"></i> 打开项目库
+                </button>
+            </div>
+
+            <!-- ========== 手动添加项目（折叠栏） ========== -->
+            <div class="form-group manual-collapsible">
+                <div class="collapsible-header" id="manualCollapseHeader" style="cursor:pointer;">
+                    <i class="fas fa-chevron-down" id="manualCollapseIcon"></i>
+                    <span>手动添加项目</span>
+                </div>
+                <div id="manualCollapseContent" class="collapsible-content">
+                    <div class="manual-input-section" style="margin-top:8px;">
+                        <div class="form-row">
+                            <input type="text" id="manualProjectName" class="form-input" placeholder="项目名称"
+                                style="flex:2;">
+                            <input type="text" id="manualProjectUnit" class="form-input" placeholder="单位"
+                                style="flex:1;">
+                        </div>
+                        <div class="form-row">
+                            <input type="number" id="manualProjectPrice" class="form-input" placeholder="单价" step="0.01"
+                                style="flex:1;">
+                            <input type="number" id="manualProjectQuantity" class="form-input" placeholder="数量"
+                                value="1" style="flex:1;">
+                        </div>
+                        <div class="search-box">
+                            <input type="text" id="manualProjectDescription" class="form-input"
+                                placeholder="工艺说明 / 描述 (可搜索已有项目)" oninput="searchProjectDescription(this.value)">
+                            <i class="fas fa-search search-icon"></i>
+                        </div>
+                        <button class="btn btn-success" style="margin-top:8px;" onclick="addManualProject()">
+                            <i class="fas fa-plus"></i> 添加到列表
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 已选项目列表 -->
+            <div class="form-group">
+                <label class="form-label"><i class="fas fa-list"></i> 已选项目列表</label>
+                <div id="selected-projects-list" class="selected-projects-container">
+                    <div class="empty-state">未选择任何项目</div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="addMultiProjects()">确认添加</button>
+                <button class="btn btn-outline" onclick="closeMultiModal()">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 项目库多选模态框 ==================== -->
+    <div id="multiSelectProjectLibraryModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeMultiSelectProjectLibrary()">&times;</button>
+            <div class="modal-header">
+                <i class="fas fa-folder-open"></i> 选择项目
+            </div>
+            <div class="search-box">
+                <input type="text" id="multi-project-search" class="form-input" placeholder="搜索项目名称或工艺说明...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+            <div id="multi-project-library-list" class="project-library-list"
+                style="max-height:300px; overflow-y:auto;">
+                <!-- 项目列表动态加载 -->
+            </div>
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="confirmMultiSelection()">确认选择</button>
+                <button class="btn btn-outline" onclick="closeMultiSelectProjectLibrary()">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 添加空间模态框 ==================== -->
+    <div id="spaceModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeSpaceModal()">&times;</button>
+            <div class="modal-header">
+                <i class="fas fa-layer-group"></i> 添加空间名称
+            </div>
+            <div class="form-group">
+                <label class="form-label"><i class="fas fa-tag"></i> 空间名称</label>
+                <input type="text" id="newSpaceName" class="form-input" placeholder="例如：阳台、茶水间">
+            </div>
+            <div class="form-group">
+                <label class="form-label"><i class="fas fa-home"></i> 适用类型</label>
+                <select id="newSpaceType" class="form-select">
+                    <option value="home">家装</option>
+                    <option value="commercial">公装</option>
+                </select>
+            </div>
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="addNewSpace()">添加</button>
+                <button class="btn btn-outline" onclick="closeSpaceModal()">取消</button>
+            </div>
+        </div>
+    </div>
+    <!-- 模态框等其他组件保持原样 -->
+    <div id="notification-area"></div>
+    <div class="mobile-bottom-bar">
+        <button class="mobile-bottom-btn active" onclick="switchToTab('home')">
+            <i class="fas fa-house"></i><span class="mobile-btn-text">项目清单</span>
+        </button>
+        <button class="mobile-bottom-btn" onclick="switchToTab('space')">
+            <i class="fas fa-layer-group"></i><span class="mobile-btn-text">空间库</span>
+        </button>
+        <button class="mobile-bottom-btn mobile-save-btn" id="mobileSaveQuotationBtn" onclick="saveCurrentQuotation()">
+            <i class="fas fa-save"></i><span class="mobile-btn-text">保存报价</span>
+        </button>
+        <button class="mobile-bottom-btn mobile-cloud-load-btn" id="mobileLoadFromCloudBtn" onclick="loadFromCloud()">
+            <i class="fas fa-cloud-download-alt"></i><span class="mobile-btn-text">云端加载</span>
+        </button>
+        <button class="mobile-bottom-btn mobile-excel-btn" onclick="exportToExcel()">
+            <i class="fas fa-file-excel"></i><span class="mobile-btn-text">导出Excel</span>
+        </button>
+        <!-- 保留原有的“记录”按钮，方便查看保存记录 -->
+        <button class="mobile-bottom-btn" onclick="switchToTab('saved-records')">
+            <i class="fas fa-folder-open"></i><span class="mobile-btn-text">报价记录</span>
+        </button>
+    </div>
+</body>
+<script src="data.js"></script>
+<script src="yun.js"></script>
+<script src="app.js"></script>
+<script src="script.js"></script>
+
+
+</html>
