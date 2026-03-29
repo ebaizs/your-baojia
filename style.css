@@ -38,7 +38,7 @@ header {
 }
 
 h1 {
-    font-size: 1.3rem;
+    font-size: 1.6rem;
     font-weight: 600;
     margin-bottom: 5px;
     display: flex;
@@ -1651,7 +1651,15 @@ header>div:first-child {
         right: 10px;
         max-width: calc(100% - 20px);
     }
+ /* 隐藏标题旁的用户名标签 */
+ header h1 small {
+    display: none;
+}
 
+/* 增大主标题字体 */
+header h1 {
+    font-size: 1.6rem;
+}
     .notification {
         max-width: 100%;
     }
@@ -1731,6 +1739,17 @@ header>div:first-child {
     .project-name-input {
         min-width: 150px;
     }
+    .desktop-actions > div:first-child {
+        display: none;
+    }
+
+    /* 缩小按钮内边距和文字 */
+    .desktop-actions .btn {
+        padding: 6px 8px;
+        font-size: 0.7rem;
+    }
+
+   
 
     .quotation-records-grid {
         grid-template-columns: repeat(2, 1fr);
