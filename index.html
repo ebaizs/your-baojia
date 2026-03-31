@@ -65,8 +65,8 @@
                             <button class="btn btn-success desktop-btn" id="headerSaveQuotationBtn">
                                 <i class="fas fa-save"></i> <span class="desktop-btn-text">保存当前报价</span>
                             </button>
-                            <button class="btn btn-warning desktop-btn" onclick="logout()" title="退出登录">
-                                <i class="fas fa-sign-out-alt"></i> <span class="desktop-btn-text">退出</span>
+                            <button class="btn btn-warning desktop-btn" onclick="printPage()" title="打印当前报价单">
+                                <i class="fas fa-print"></i> <span class="desktop-btn-text">打印</span>
                             </button>
                         </div>
                     </div>
@@ -93,6 +93,7 @@
                     <div class="section-header">
                         <div class="section-title">
                             <i class="fas fa-paint-roller"></i> 项目清单
+                            <span class="print-project-name" style="display: none;"></span>
                         </div>
                     </div>
                     <div class="section-subtitle">
@@ -286,9 +287,7 @@
                         </div>
                     </div>
                     <div class="summary-footer">
-                        <div class="summary-note">
-                            <i class="fas fa-info-circle"></i> 报价已包含材料及人工费，不含税金
-                        </div>
+                        <div id="dynamic-footer" class="summary-footer"></div>
                     </div>
                 </div>
             </div>
@@ -305,6 +304,24 @@
                         </div>
                     </div>
                     <div class="space-categories">
+                        <!-- ========== 新增备用空间区块 ========== -->
+                     <div class="space-category spare-category">
+    <div class="space-category-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h4><i class="fas fa-boxes"></i> 备用空间</h4>
+        <div>
+            <button class="btn btn-primary btn-sm" onclick="openSelectSpacesModal()">
+                <i class="fas fa-plus-circle"></i> 选取多个空间
+            </button>
+            <button class="btn btn-danger btn-sm" onclick="clearAllSpareSpaces()" style="margin-left: 8px;">
+                <i class="fas fa-trash-alt"></i> 清空选择
+            </button>
+        </div>
+    </div>
+    <div id="spare-space-list" class="space-items">
+                                <!-- 动态渲染备用空间列表 -->
+                            </div>
+                        </div>
+                        <!-- ========== 原家装分类 ========== -->
                         <div class="space-category">
                             <h4><i class="fas fa-home"></i> 家装常用空间</h4>
                             <div id="home-space-list" class="space-items"></div>
@@ -459,6 +476,23 @@
             <div class="action-buttons">
                 <button class="btn btn-primary" onclick="addNewSpace()">添加</button>
                 <button class="btn btn-outline" onclick="closeSpaceModal()">取消</button>
+            </div>
+        </div>
+    </div>
+    <!-- ========== 新增选择空间对话框 ========== -->
+    <div id="selectSpacesModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeSelectSpacesModal()">&times;</button>
+            <div class="modal-header">
+                <i class="fas fa-check-square"></i> 选择空间（可多选）
+            </div>
+            <div id="available-spaces-list" class="space-checkbox-list"
+                style="max-height: 300px; overflow-y: auto; margin-bottom: 15px;">
+                <!-- 动态生成复选框 -->
+            </div>
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="addSelectedSpacesToSpare()">确认添加</button>
+                <button class="btn btn-outline" onclick="closeSelectSpacesModal()">取消</button>
             </div>
         </div>
     </div>

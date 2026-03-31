@@ -578,22 +578,28 @@ header>div:first-child {
 }
 
 /* ========== 项目行样式 ========== */
-.item-row {
+.item-row,
+.item-header {
     display: grid;
-    grid-template-columns: 0.1fr 0.2fr 2fr 0.8fr 0.8fr 1fr 1fr 0.8fr;
+    grid-template-columns: 4% 5% 1fr 5% 6% 8% 10% 4%;
     gap: 8px;
     padding: 10px 12px;
-    border-bottom: 1px solid #f1f5f9;
     align-items: center;
     font-size: 0.85rem;
 }
 
-.item-row.item-header {
+.item-header {
     background: #f8fafc;
     font-weight: 500;
     color: #64748b;
     font-size: 0.8rem;
     border-bottom: 2px solid #e2e8f0;
+}
+
+.item-row {
+    border-bottom: 1px solid #f1f5f9;
+    min-height: 50px;
+    /* 约2行文字高度 */
 }
 
 .item-row:hover {
@@ -651,9 +657,24 @@ header>div:first-child {
 .item-col-name {
     font-weight: 500;
     color: #334155;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    overflow: visible;
+    white-space: normal;
+    word-wrap: break-word;
+    word-break: break-word;
+    min-width: 0;
     cursor: pointer;
+}
+
+.item-col-name div:first-child {
+    color: #1e3a8a;
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.item-col-name div:last-child {
+    font-size: 0.7rem;
+    color: #0e0e0e;
 }
 
 .item-col-space {
@@ -1578,6 +1599,12 @@ header>div:first-child {
         font-size: 14px;
     }
 
+    .item-row,
+    .item-header {
+        grid-template-columns: 6% 6% 1fr 8% 10% 8% 10% 8%;
+        gap: 5px;
+    }
+
     .tabs-container {
         display: none !important;
     }
@@ -1651,15 +1678,15 @@ header>div:first-child {
         right: 10px;
         max-width: calc(100% - 20px);
     }
- /* 隐藏标题旁的用户名标签 */
- header h1 small {
-    display: none;
-}
 
-/* 增大主标题字体 */
-header h1 {
-    font-size: 1.6rem;
-}
+    header h1 small {
+        display: none;
+    }
+
+    header h1 {
+        font-size: 1.6rem;
+    }
+
     .notification {
         max-width: 100%;
     }
@@ -1739,17 +1766,15 @@ header h1 {
     .project-name-input {
         min-width: 150px;
     }
-    .desktop-actions > div:first-child {
+
+    .desktop-actions>div:first-child {
         display: none;
     }
 
-    /* 缩小按钮内边距和文字 */
     .desktop-actions .btn {
         padding: 6px 8px;
         font-size: 0.7rem;
     }
-
-   
 
     .quotation-records-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -1770,57 +1795,181 @@ header h1 {
     }
 }
 
+/* ========== 打印样式 ========== */
 @media print {
 
-    .tabs,
+    /* 隐藏所有操作元素 */
+    header,
+    .desktop-actions,
+    .tabs-container,
     .mobile-bottom-bar,
     .btn,
-    .desktop-actions {
+    .space-arrow-up,
+    .space-arrow-down,
+    .item-arrow-up,
+    .item-arrow-down,
+    .space-copy-btn,
+    .space-move-btn,
+    .space-delete-btn,
+    .space-buttons,
+    .item-col-arrows,
+    .item-col-actions,
+    .space-filter,
+    .section-actions,
+    .section-header .btn,
+    .tab-export-btn,
+    #headerSaveQuotationBtn,
+    .clear-all-btn,
+    .record-actions-row,
+    .import-btn,
+    .export-btn,
+    .cloud-backup-btn,
+    .cloud-load-btn,
+    .project-name-input,
+    .section-intro>div:last-child,
+    .section-intro .section-subtitle {
         display: none !important;
     }
 
-    .tab-content {
+    .summary-footer {
+        display: block !important;
+        margin-top: 10px;
+        font-size: 10pt;
+    }
+
+    .signature-area {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    .summary-note {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    /* 强制显示项目清单，隐藏其他标签页 */
+    #home-tab {
         display: block !important;
     }
 
+    #space-tab,
+    #saved-records-tab {
+        display: none !important;
+    }
+
+    /* 保留分类标题 */
+    .section-title {
+        font-size: 16pt;
+        margin-bottom: 10px;
+    }
+
+    /* 打印时显示项目名称（动态添加） */
+    .print-project-name {
+        display: inline !important;
+        font-size: 1rem;
+        margin-left: 10px;
+        font-weight: normal;
+        color: #334155;
+    }
+
+    /* 调整表格列宽（6列） */
+    .item-header,
+    .item-row {
+        display: grid;
+        grid-template-columns: 4% 58% 5% 6% 8% 10%;
+        gap: 8px;
+    }
+
+    /* 隐藏调整箭头和操作按钮列 */
+    .item-header .item-col-arrows,
+    .item-header .item-col-actions,
+    .item-row .item-col-arrows,
+    .item-row .item-col-actions {
+        display: none !important;
+    }
+
+    /* 分页控制 */
     .section-card {
-        box-shadow: none;
-        border: 1px solid #cbd5e1;
         break-inside: avoid;
+    }
+
+    .category-section {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    .category-section .section-header {
+        break-after: avoid;
+        page-break-after: avoid;
+    }
+
+    .category-section .space-group:first-of-type {
+        break-before: avoid;
+        page-break-before: avoid;
+    }
+
+    .section-intro {
+        break-after: avoid;
+        page-break-after: avoid;
+    }
+
+    .category-section:first-of-type {
+        break-before: avoid;
+        page-break-before: avoid;
+    }
+
+    .space-group {
+        break-inside: avoid;
+        break-after: avoid;
+        page-break-inside: avoid;
+        page-break-after: avoid;
     }
 
     .item-row {
         break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    .item-list-scroll {
+        overflow: visible !important;
+    }
+
+    /* 页边距调整 */
+    @page {
+        margin: 0.5cm;
     }
 
     body {
-        padding-bottom: 0;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* 工艺说明字体缩小 */
+    .item-col-name div {
+        font-size: 0.8em !important;
     }
 }
 
-/* 移动底部栏按钮区分颜色（柔和、不突兀） */
+/* ========== 移动底部栏按钮颜色 ========== */
 .mobile-save-btn {
     background-color: #e0f2fe !important;
-    /* 淡蓝 */
     color: #0369a1 !important;
     border-color: #7dd3fc !important;
 }
 
 .mobile-cloud-load-btn {
     background-color: #dcfce7 !important;
-    /* 淡绿 */
     color: #15803d !important;
     border-color: #86efac !important;
 }
 
 .mobile-excel-btn {
     background-color: #ffedd5 !important;
-    /* 淡橙 */
     color: #b45309 !important;
     border-color: #fed7aa !important;
 }
 
-/* 保存记录板块布局调整 */
+/* ========== 保存记录板块布局 ========== */
 #saved-records-tab .record-header {
     flex-wrap: wrap;
 }
@@ -1845,7 +1994,6 @@ header h1 {
     margin-top: 12px;
 }
 
-/* 四个按钮不同颜色（柔和区分） */
 .import-btn {
     background: #e0f2fe !important;
     color: #0369a1 !important;
@@ -1870,6 +2018,7 @@ header h1 {
     border: 1px solid #fed7aa !important;
 }
 
+/* ========== 空间库选中高亮 ========== */
 .space-item-active {
     background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
     border-color: #4361ee;
@@ -1882,7 +2031,7 @@ header h1 {
     color: #1e40af;
 }
 
-/* 手动添加折叠栏样式 */
+/* ========== 手动添加折叠栏样式 ========== */
 .manual-collapsible {
     margin: 15px 0;
 }
@@ -1903,4 +2052,140 @@ header h1 {
 
 .collapsible-content {
     transition: all 0.2s;
+}
+
+/* 汇总脚注区域 */
+.summary-footer {
+    margin-top: 15px;
+}
+
+.summary-note {
+    margin-top: 15px;
+}
+
+.summary-note .note-title {
+    font-weight: bold;
+    margin: 8px 0 4px 0;
+}
+
+.summary-note ol {
+    margin-left: 20px;
+    padding-left: 0;
+    line-height: 1.5;
+}
+
+/* 签字区域 */
+.signature-area {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    border-top: 1px dashed #cbd5e1;
+    padding-top: 20px;
+}
+
+.signature-item {
+    flex: 1;
+    text-align: center;
+}
+
+.signature-item .signature-line {
+    margin-top: 20px;
+}
+
+/* 打印样式 */
+@media print {
+    .signature-area {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    .summary-note {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+}
+/* 备用空间卡片特殊样式 */
+.spare-category {
+    border-left: 4px solid #ef4444;
+    background: #fff5f5;
+    margin-bottom: 20px;
+}
+.spare-space-item {
+    border-color: #ef4444 !important;
+    background: #fff0f0;
+}
+.spare-space-item .space-item-name {
+    color: #b91c1c;
+    font-weight: 500;
+}
+.spare-space-item .space-item-type {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+/* 空间选择对话框复选框样式 */
+.space-checkbox-list {
+    background: #f9fafb;
+    border-radius: 8px;
+    padding: 10px;
+}
+.space-checkbox-item {
+    padding: 8px 12px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+}
+.space-checkbox-item input {
+    margin-right: 10px;
+    width: 18px;
+    height: 18px;
+}
+.space-checkbox-item label {
+    flex: 1;
+    cursor: pointer;
+}
+/* 空间多选对话框网格布局 */
+.space-checkbox-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    background: #f9fafb;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.space-checkbox-item {
+    display: flex;
+    align-items: center;
+    padding: 6px 8px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.space-checkbox-item:hover {
+    background-color: #f1f5f9;
+    border-color: #4361ee;
+}
+
+.space-checkbox-item input {
+    margin-right: 8px;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.space-checkbox-item label {
+    flex: 1;
+    cursor: pointer;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+@media (max-width: 640px) {
+    .space-checkbox-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
