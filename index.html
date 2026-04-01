@@ -298,26 +298,32 @@
                     <div class="section-header">
                         <div class="section-title">
                             <i class="fas fa-layer-group"></i> 空间区域词库
-                            <button class="btn btn-primary btn-sm" onclick="openSpaceModal()">
-                                <i class="fas fa-plus"></i> 添加空间名
-                            </button>
                         </div>
                     </div>
                     <div class="space-categories">
                         <!-- ========== 新增备用空间区块 ========== -->
-                     <div class="space-category spare-category">
-    <div class="space-category-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-        <h4><i class="fas fa-boxes"></i> 备用空间</h4>
-        <div>
-            <button class="btn btn-primary btn-sm" onclick="openSelectSpacesModal()">
-                <i class="fas fa-plus-circle"></i> 选取多个空间
-            </button>
-            <button class="btn btn-danger btn-sm" onclick="clearAllSpareSpaces()" style="margin-left: 8px;">
-                <i class="fas fa-trash-alt"></i> 清空选择
-            </button>
-        </div>
-    </div>
-    <div id="spare-space-list" class="space-items">
+                        <div class="space-category spare-category">
+                            <div class="space-category-header"
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <h4><i class="fas fa-boxes"></i> 项目中的空间</h4>
+                                <div style="display: flex; gap: 8px;">
+                                    <!-- 内联添加空间表单 -->
+                                    <div class="inline-add-space">
+                                        <input type="text" id="newSpaceNameInline" class="form-input-sm"
+                                            placeholder="输入新空间名" style="width: 150px;">
+                                        <button class="btn btn-success btn-sm" onclick="addInlineSpace()">
+                                            <i class="fas fa-plus"></i> 添加空间
+                                        </button>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" onclick="openSelectSpacesModal()">
+                                        <i class="fas fa-plus-circle"></i> 选取多个空间
+                                    </button>
+                                    <button class="btn btn-danger btn-sm" onclick="clearAllSpareSpaces()">
+                                        <i class="fas fa-trash-alt"></i> 清空选择
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="spare-space-list" class="space-items">
                                 <!-- 动态渲染备用空间列表 -->
                             </div>
                         </div>
@@ -360,6 +366,20 @@
                     </div>
                     <div class="section-subtitle">最多保存5000条报价记录，点击「编辑」可恢复项目数据。</div>
                     <div id="quotationRecordsList" style="margin-top: 15px;"></div>
+                </div>
+                <div class="section-card used-projects-section">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <i class="fas fa-list-ul"></i> 已使用项目库
+                        </div>
+                        <button id="syncUsedProjectsBtn" class="btn btn-sm btn-primary sync-btn">
+                            <i class="fas fa-sync-alt"></i> 更新修改
+                        </button>
+                    </div>
+                    <div class="section-subtitle">双击单价或工艺说明可编辑，点击上方按钮同步到当前清单</div>
+                    <div id="used-projects-list" class="used-projects-container">
+                        <!-- 动态渲染 -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -486,6 +506,11 @@
             <div class="modal-header">
                 <i class="fas fa-check-square"></i> 选择空间（可多选）
             </div>
+            <!-- 搜索框 -->
+            <div class="search-box" style="margin-bottom: 12px;">
+                <input type="text" id="spaceSearchInput" class="form-input" placeholder="搜索空间名称...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
             <div id="available-spaces-list" class="space-checkbox-list"
                 style="max-height: 300px; overflow-y: auto; margin-bottom: 15px;">
                 <!-- 动态生成复选框 -->
@@ -495,6 +520,7 @@
                 <button class="btn btn-outline" onclick="closeSelectSpacesModal()">取消</button>
             </div>
         </div>
+    </div>
     </div>
     <!-- 模态框等其他组件保持原样 -->
     <div id="notification-area"></div>

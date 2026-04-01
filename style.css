@@ -2104,20 +2104,24 @@ header>div:first-child {
         page-break-inside: avoid;
     }
 }
+
 /* 备用空间卡片特殊样式 */
 .spare-category {
     border-left: 4px solid #ef4444;
     background: #fff5f5;
     margin-bottom: 20px;
 }
+
 .spare-space-item {
     border-color: #ef4444 !important;
     background: #fff0f0;
 }
+
 .spare-space-item .space-item-name {
     color: #b91c1c;
     font-weight: 500;
 }
+
 .spare-space-item .space-item-type {
     background: #fee2e2;
     color: #b91c1c;
@@ -2129,21 +2133,25 @@ header>div:first-child {
     border-radius: 8px;
     padding: 10px;
 }
+
 .space-checkbox-item {
     padding: 8px 12px;
     border-bottom: 1px solid #e2e8f0;
     display: flex;
     align-items: center;
 }
+
 .space-checkbox-item input {
     margin-right: 10px;
     width: 18px;
     height: 18px;
 }
+
 .space-checkbox-item label {
     flex: 1;
     cursor: pointer;
 }
+
 /* 空间多选对话框网格布局 */
 .space-checkbox-list {
     display: grid;
@@ -2184,8 +2192,127 @@ header>div:first-child {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
 @media (max-width: 640px) {
     .space-checkbox-list {
         grid-template-columns: repeat(2, 1fr);
     }
+}
+
+/* 内联添加空间表单 */
+.inline-add-space {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #f8fafc;
+    padding: 4px 8px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.form-input-sm {
+    padding: 6px 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    background: white;
+    color: #334155;
+    min-width: 120px;
+}
+
+.form-input-sm:focus {
+    outline: none;
+    border-color: #4361ee;
+    box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.1);
+
+}
+ /* 小屏幕（≤480px）空间库适配 */
+@media (max-width: 480px) {
+    /* 备用空间头部按钮组：允许换行 */
+    .spare-category .space-category-header {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .spare-category .space-category-header > div {
+        flex-wrap: wrap;
+        gap: 8px;
+        width: 100%;
+    }
+    /* 内联添加空间表单：宽度自适应 */
+    .inline-add-space {
+        flex: 1;
+        width: 100%;
+    }
+    .inline-add-space input.form-input-sm {
+        flex: 1;
+        min-width: 0;
+    }
+    /* 空间多选对话框网格改为 2 列 */
+    .space-checkbox-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    /* 空间库中的空间项目网格适配 */
+    .space-items {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+}
+/* 已使用项目库样式 */
+.used-projects-section {
+    margin-bottom: 20px;
+}
+
+.used-projects-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.used-projects-header {
+    display: grid;
+    grid-template-columns: 2fr 0.8fr 1fr 2fr;
+    background: #f1f5f9;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    gap: 8px;
+}
+
+.used-projects-row {
+    display: grid;
+    grid-template-columns: 2fr 0.8fr 1fr 2fr;
+    padding: 8px 12px;
+    border-bottom: 1px solid #e2e8f0;
+    gap: 8px;
+    align-items: center;
+}
+
+.used-projects-row:hover {
+    background-color: #f8fafc;
+}
+
+.used-col-price,
+.used-col-desc {
+    cursor: pointer;
+}
+
+.used-inline-edit {
+    width: 100%;
+    padding: 4px 8px;
+    border: 1px solid #4361ee;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    background: white;
+}
+
+@media (max-width: 640px) {
+    .used-projects-header,
+    .used-projects-row {
+        grid-template-columns: 1.5fr 0.6fr 0.9fr 1.5fr;
+        font-size: 0.75rem;
+        gap: 6px;
+    }
+}
+.used-col-name {
+    cursor: pointer;
 }
