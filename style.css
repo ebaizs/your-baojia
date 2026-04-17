@@ -581,7 +581,7 @@ header>div:first-child {
 .item-row,
 .item-header {
     display: grid;
-    grid-template-columns: 4% 5% 1fr 5% 6% 8% 10% 4%;
+    grid-template-columns: 4% 5% 1fr 7% 8% 10% 12% 5%;
     gap: 8px;
     padding: 10px 12px;
     align-items: center;
@@ -1601,7 +1601,7 @@ header>div:first-child {
 
     .item-row,
     .item-header {
-        grid-template-columns: 6% 6% 1fr 8% 10% 8% 10% 8%;
+        grid-template-columns: 5% 6% 1fr 9% 10% 10% 12% 7%;
         gap: 5px;
     }
 
@@ -1876,7 +1876,7 @@ header>div:first-child {
     .item-header,
     .item-row {
         display: grid;
-        grid-template-columns: 4% 58% 5% 6% 8% 10%;
+        grid-template-columns: 4% 55% 6% 7% 9% 11%;
         gap: 8px;
     }
 
@@ -2092,6 +2092,25 @@ header>div:first-child {
     margin-top: 20px;
 }
 
+/* 打印选项模态框样式 */
+.checkbox-label,
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+.checkbox-label input,
+.radio-label input {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #4361ee;
+}
+
 /* 打印样式 */
 @media print {
     .signature-area {
@@ -2102,6 +2121,32 @@ header>div:first-child {
     .summary-note {
         break-inside: avoid;
         page-break-inside: avoid;
+    }
+
+    /* 打印时隐藏提示栏（汇总脚注） */
+    .print-hide-footer .summary-footer,
+    .print-hide-footer #dynamic-footer {
+        display: none !important;
+    }
+
+    /* 隐藏价格信息 - 仅数据行，保留表头 */
+    .print-hide-price .item-row .item-col-price,
+    .print-hide-price .item-row .item-col-total,
+    .print-hide-price .space-total,
+    .print-hide-price .summary-row .summary-value,
+    .print-hide-price #home-grand-total {
+        visibility: hidden !important;
+    }
+
+    /* 隐藏分类总计中的金额（保留“总计：”文字） */
+    .print-hide-price .category-total span {
+        visibility: hidden !important;
+    }
+
+    /* 确保表头中的单价、小计列依然可见 */
+    .print-hide-price .item-header .item-col-price,
+    .print-hide-price .item-header .item-col-total {
+        visibility: visible !important;
     }
 }
 
@@ -2226,36 +2271,44 @@ header>div:first-child {
     box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.1);
 
 }
- /* 小屏幕（≤480px）空间库适配 */
+
+/* 小屏幕（≤480px）空间库适配 */
 @media (max-width: 480px) {
+
     /* 备用空间头部按钮组：允许换行 */
     .spare-category .space-category-header {
         flex-wrap: wrap;
         gap: 8px;
     }
-    .spare-category .space-category-header > div {
+
+    .spare-category .space-category-header>div {
         flex-wrap: wrap;
         gap: 8px;
         width: 100%;
     }
+
     /* 内联添加空间表单：宽度自适应 */
     .inline-add-space {
         flex: 1;
         width: 100%;
     }
+
     .inline-add-space input.form-input-sm {
         flex: 1;
         min-width: 0;
     }
+
     /* 空间多选对话框网格改为 2 列 */
     .space-checkbox-list {
         grid-template-columns: repeat(2, 1fr);
     }
+
     /* 空间库中的空间项目网格适配 */
     .space-items {
         grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     }
 }
+
 /* 已使用项目库样式 */
 .used-projects-section {
     margin-bottom: 20px;
@@ -2306,6 +2359,7 @@ header>div:first-child {
 }
 
 @media (max-width: 640px) {
+
     .used-projects-header,
     .used-projects-row {
         grid-template-columns: 1.5fr 0.6fr 0.9fr 1.5fr;
@@ -2313,6 +2367,7 @@ header>div:first-child {
         gap: 6px;
     }
 }
+
 .used-col-name {
     cursor: pointer;
 }

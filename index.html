@@ -105,7 +105,7 @@
                         <button class="btn btn-primary" onclick="quickAddProjectWithChoice()">
                             <i class="fas fa-bolt"></i> 快速模板
                         </button>
-                        <button class="btn btn-success" onclick="clearAllProjects('home')">
+                        <button class="btn btn-success" onclick="clearAllProjects()">
                             <i class="fas fa-trash-alt"></i> 清空
                         </button>
                     </div>
@@ -114,13 +114,13 @@
                 <!-- 基础装修 -->
                 <div class="section-card category-section">
                     <div class="section-header">
-                        <div class="section-title collapsible" onclick="toggleCategoryCollapse('home', 'base')">
+                        <div class="section-title collapsible" onclick="toggleCategoryCollapse('base')">
                             <i class="fas fa-hammer"></i> 基础装修
                             <span class="badge" id="home-base-count">0个项目</span>
                             <i class="fas fa-chevron-down collapse-icon" id="collapse-home-base"></i>
                         </div>
                         <div class="section-actions">
-                            <button class="btn btn-primary btn-sm" onclick="openAddMultiModal('home', 'base')">
+                            <button class="btn btn-primary btn-sm" onclick="openAddMultiModal('base')">
                                 <i class="fas fa-plus"></i> 添加项目
                             </button>
                         </div>
@@ -128,11 +128,11 @@
                     <div id="home-base-content" class="category-content">
                         <div class="category-summary">
                             <div class="category-total">
-                                总计: <span id="home-base-total">¥0.00</span>
+                                基础装修合计: <span id="home-base-total">¥0.00</span>
                             </div>
                             <div class="space-filter">
                                 <select class="form-select-sm" id="home-base-space-filter"
-                                    onchange="filterProjectsBySpace('home', 'base')">
+                                    onchange="filterProjectsBySpace('base')">
                                     <option value="">全部空间</option>
                                 </select>
                             </div>
@@ -148,25 +148,25 @@
                 <!-- 主要材料 -->
                 <div class="section-card category-section">
                     <div class="section-header">
-                        <div class="section-title collapsible" onclick="toggleCategoryCollapse('home', 'auxiliary')">
+                        <div class="section-title collapsible" onclick="toggleCategoryCollapse('auxiliary')">
                             <i class="fas fa-tools"></i> 主要材料
                             <span class="badge" id="home-auxiliary-count">0个项目</span>
                             <i class="fas fa-chevron-down collapse-icon" id="collapse-home-auxiliary"></i>
                         </div>
                         <div class="section-actions">
-                            <button class="btn btn-primary btn-sm" onclick="openAddMultiModal('home', 'auxiliary')">
-                                <i class="fas fa-plus"></i> 添加项目
+                            <button class="btn btn-primary btn-sm" onclick="openAddMultiModal('auxiliary')" <i
+                                class="fas fa-plus"></i> 添加项目
                             </button>
                         </div>
                     </div>
                     <div id="home-auxiliary-content" class="category-content">
                         <div class="category-summary">
                             <div class="category-total">
-                                总计: <span id="home-auxiliary-total">¥0.00</span>
+                                主要材料合计: <span id="home-auxiliary-total">¥0.00</span>
                             </div>
                             <div class="space-filter">
                                 <select class="form-select-sm" id="home-auxiliary-space-filter"
-                                    onchange="filterProjectsBySpace('home', 'auxiliary')">
+                                    onchange="filterProjectsBySpace('auxiliary')">
                                     <option value="">全部空间</option>
                                 </select>
                             </div>
@@ -188,7 +188,7 @@
                             <i class="fas fa-chevron-down collapse-icon" id="collapse-home-furniture"></i>
                         </div>
                         <div class="section-actions">
-                            <button class="btn btn-primary btn-sm" onclick="openAddMultiModal('home', 'furniture')">
+                            <button class="btn btn-primary btn-sm" onclick="openAddMultiModal('furniture')">
                                 <i class="fas fa-plus"></i> 添加项目
                             </button>
                         </div>
@@ -196,11 +196,11 @@
                     <div id="home-furniture-content" class="category-content">
                         <div class="category-summary">
                             <div class="category-total">
-                                总计: <span id="home-furniture-total">¥0.00</span>
+                                家具/电器及配饰合计: <span id="home-furniture-total">¥0.00</span>
                             </div>
                             <div class="space-filter">
                                 <select class="form-select-sm" id="home-furniture-space-filter"
-                                    onchange="filterProjectsBySpace('home', 'furniture')">
+                                    onchange="filterProjectsBySpace('furniture')">
                                     <option value="">全部空间</option>
                                 </select>
                             </div>
@@ -222,7 +222,7 @@
                             <i class="fas fa-chevron-down collapse-icon" id="collapse-home-other"></i>
                         </div>
                         <div class="section-actions">
-                            <button class="btn btn-primary btn-sm" onclick="openAddMultiModal('home', 'other')">
+                            <button class="btn btn-primary btn-sm" onclick="openAddMultiModal('other')">
                                 <i class="fas fa-plus"></i> 添加项目
                             </button>
                         </div>
@@ -230,11 +230,11 @@
                     <div id="home-other-content" class="category-content">
                         <div class="category-summary">
                             <div class="category-total">
-                                总计: <span id="home-other-total">¥0.00</span>
+                                其它项合计: <span id="home-other-total">¥0.00</span>
                             </div>
                             <div class="space-filter">
                                 <select class="form-select-sm" id="home-other-space-filter"
-                                    onchange="filterProjectsBySpace('home', 'other')">
+                                    onchange="filterProjectsBySpace('other')">
                                     <option value="">全部空间</option>
                                 </select>
                             </div>
@@ -251,37 +251,37 @@
                 <div class="section-card summary-section">
                     <div class="section-header">
                         <div class="section-title">
-                            <i class="fas fa-chart-pie"></i> 家装报价汇总
+                            <i class="fas fa-chart-pie"></i> 装饰报价汇总
                         </div>
                     </div>
                     <div id="home-summary">
                         <div class="summary-row">
                             <div class="summary-label">
-                                <i class="fas fa-hammer"></i> 基础装修
+                                <i class="fas fa-hammer"></i> 基础装修合计:
                             </div>
                             <div class="summary-value" id="home-base-summary">¥0.00</div>
                         </div>
                         <div class="summary-row">
                             <div class="summary-label">
-                                <i class="fas fa-tools"></i> 主要材料
+                                <i class="fas fa-tools"></i> 主要材料合计:
                             </div>
                             <div class="summary-value" id="home-auxiliary-summary">¥0.00</div>
                         </div>
                         <div class="summary-row">
                             <div class="summary-label">
-                                <i class="fas fa-couch"></i> 家具家电及配饰
+                                <i class="fas fa-couch"></i> 家具家电及配饰合计:
                             </div>
                             <div class="summary-value" id="home-furniture-summary">¥0.00</div>
                         </div>
                         <div class="summary-row">
                             <div class="summary-label">
-                                <i class="fas fa-ellipsis-h"></i> 其它项
+                                <i class="fas fa-ellipsis-h"></i> 其它项合计:
                             </div>
                             <div class="summary-value" id="home-other-summary">¥0.00</div>
                         </div>
                         <div class="summary-row total">
                             <div class="summary-label">
-                                <i class="fas fa-file-invoice-dollar"></i> 合计
+                                <i class="fas fa-file-invoice-dollar"></i> 报价总计:
                             </div>
                             <div class="summary-value" id="home-grand-total">¥0.00</div>
                         </div>
@@ -345,6 +345,10 @@
                     <div class="section-header record-header">
                         <div class="section-title">
                             <i class="fas fa-save"></i> 报价记录管理
+                            <span id="cloudBackupTimeLabel"
+                                style="margin-left: 12px; font-size: 0.75rem; color: #3b82f6;">
+                                <i class="fas fa-cloud-upload-alt"></i> 云端备份: 未加载
+                            </span>
                             <button class="btn btn-warning btn-sm clear-all-btn" id="clearAllRecordsBtn">
                                 <i class="fas fa-trash-alt"></i> 清空全部记录
                             </button>
@@ -362,6 +366,14 @@
                             <button class="btn cloud-load-btn btn-sm" id="loadCloudBtn">
                                 <i class="fas fa-cloud-download-alt"></i> 从云端加载文件
                             </button>
+                        </div>
+                        <!-- 新增云端时间显示（与按钮同行右侧） -->
+                        <div class="cloud-time-info" id="cloudDataTimeInfo">
+                            <i class="fas fa-cloud"></i>
+                            <span class="cloud-time-label">云端备份时间：</span>
+                            <span id="cloudDataTime">--</span>
+                            <i class="fas fa-sync-alt refresh-cloud-time" id="refreshCloudTimeBtn" title="刷新云端时间"
+                                style="cursor:pointer; margin-left:5px;"></i>
                         </div>
                     </div>
                     <div class="section-subtitle">最多保存5000条报价记录，点击「编辑」可恢复项目数据。</div>
@@ -496,6 +508,39 @@
             <div class="action-buttons">
                 <button class="btn btn-primary" onclick="addNewSpace()">添加</button>
                 <button class="btn btn-outline" onclick="closeSpaceModal()">取消</button>
+            </div>
+        </div>
+    </div>
+    <!-- ==================== 打印选项模态框 ==================== -->
+    <div id="printOptionsModal" class="modal" style="display:none;">
+        <div class="modal-content" style="max-width:450px;">
+            <button class="modal-close" onclick="closePrintOptionsModal()">&times;</button>
+            <div class="modal-header">
+                <i class="fas fa-print"></i> 打印选项
+            </div>
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="printHideFooter"> A、隐藏提示栏（打印时不显示提示栏所有内容）
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="printHidePrice"> B、隐藏所有价格信息（单价/金额位置留空）
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="radio-label">
+                    <input type="radio" name="printTitleType" value="home" checked> C、家装项目（标题：项目名称 + 家庭装饰项目报价表）
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="radio-label">
+                    <input type="radio" name="printTitleType" value="commercial"> D、公装项目（标题：项目名称 + 装饰项目报价表）
+                </label>
+            </div>
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="confirmPrintOptions()">确认打印</button>
+                <button class="btn btn-outline" onclick="closePrintOptionsModal()">取消</button>
             </div>
         </div>
     </div>
